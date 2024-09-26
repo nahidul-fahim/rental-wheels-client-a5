@@ -3,7 +3,9 @@ import { useGetAllCarsQuery } from "@/redux/features/car/carApi";
 
 const Car = () => {
 
-    const { isLoading, data } = useGetAllCarsQuery();
+    const carType = ""
+
+    const { isLoading, data } = useGetAllCarsQuery({carType});
 
     console.log("All cars data =>", data);
 

@@ -4,8 +4,8 @@ const carApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         // get all cars
         getAllCars: builder.query({
-            query: () => ({
-                url: "/cars",
+            query: ({ carType = '' }) => ({
+                url: `/cars?carType=${carType}`,
                 method: "GET"
             })
         })
