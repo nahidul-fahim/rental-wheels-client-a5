@@ -10,8 +10,9 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '@/redux/hooks';
 import { useSignupMutation } from '@/redux/features/auth/authApi';
 import { toast } from 'sonner';
-import { setUser } from '@/redux/features/auth/authSlice';
+import { setUser, TUser } from '@/redux/features/auth/authSlice';
 import { Checkbox } from '@/components/ui/checkbox';
+import { verifyToken } from '@/utils/verifyToken';
 
 const Signup = () => {
     const [email, setEmail] = useState('');
@@ -66,13 +67,14 @@ const Signup = () => {
             };
             // send the formData to api
             const res = await signup(signupInfo).unwrap();
+            const user = verifyToken(res?.token) as TUser;
 
             if (res?.success) {
                 toast.success("Signup successful!", { id: toastId, duration: 2000 });
                 navigate("/")
                 // setting the user to state
                 dispatch(setUser({
-                    user: res?.data,
+                    user: user,
                     token: res?.token
                 }));
             } else {

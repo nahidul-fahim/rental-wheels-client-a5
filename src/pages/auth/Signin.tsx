@@ -10,7 +10,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '@/redux/hooks';
 import { useSigninMutation } from '@/redux/features/auth/authApi';
 import { toast } from 'sonner';
-import { setUser } from '@/redux/features/auth/authSlice';
+import { setUser, TUser } from '@/redux/features/auth/authSlice';
+import { verifyToken } from '@/utils/verifyToken';
 
 
 const Signin = () => {
@@ -47,13 +48,15 @@ const Signin = () => {
             };
             // send the formData to api
             const res = await signin(signinInfo).unwrap();
+            const user = verifyToken(res?.token) as TUser;
+
 
             if (res?.success) {
                 toast.success("Signin successful!", { id: toastId, duration: 2000 });
                 navigate("/")
                 // setting the user to state
                 dispatch(setUser({
-                    user: res?.data,
+                    user: user,
                     token: res?.token
                 }));
             } else {
