@@ -15,7 +15,6 @@ type TInputProps = {
     minValue?: number;
     maxValue?: number;
     required?: boolean;
-    // eslint-disable-next-line no-unused-vars
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
