@@ -5,7 +5,7 @@ import { Textarea } from "../ui/textarea";
 type TTextAreaProps = {
     name: string;
     placeholder: string;
-    label: string;
+    label?: string;
     className?: string;
     defaultValue?: any;
 }

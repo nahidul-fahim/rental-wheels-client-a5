@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { IoMailOutline, IoLockClosedOutline, IoCarSportSharp, IoEye, IoEyeOff } from "react-icons/io5";
@@ -58,9 +59,9 @@ const Signin = () => {
             } else {
                 toast.error(res?.message, { id: toastId, duration: 2000 });
             }
-        } catch (error) {
-            console.log(error);
-            toast.error("Something went wrong!", { id: toastId, duration: 2000 });
+        } catch (error: any) {
+            const errorMessage = error?.data?.message || 'An error occurred';
+            toast.error(errorMessage, { id: toastId, duration: 2000 });
         }
 
     };
@@ -93,7 +94,7 @@ const Signin = () => {
                                 />
                             </div>
                         </div>
-                        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+                        {error && <p className="text-red-600 font-medium text-sm text-center">{error}</p>}
 
                         {/* password */}
                         <div className="space-y-2">
@@ -135,7 +136,7 @@ const Signin = () => {
                     </div>
                     <div className="text-sm text-center text-body">
                         <span>Don't have an account? </span>
-                        <a href="#" className="font-medium text-blue-600 hover:text-blue-500">
+                        <a href="/signup" className="font-medium text-blue-600 hover:text-blue-500">
                             Sign up
                         </a>
                     </div>
