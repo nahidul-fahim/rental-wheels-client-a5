@@ -11,8 +11,11 @@ const Car = () => {
     const { isLoading, data } = useGetAllCarsQuery({ carType });
 
     if (isLoading) return <div>Loading...</div>
+    const allCars = data?.data?.allCars;
+    const uniqueCarTypes = data?.data?.uniqueCarTypes;
 
     return (
+
         <div className="min-h-screen bg-gray-50">
             {/* Header Image Section */}
             <div
@@ -28,18 +31,14 @@ const Car = () => {
                 <nav className="flex items-center text-gray-500 mb-8" aria-label="Breadcrumb">
                     <ol className="flex items-center space-x-2">
                         <li>
-                            <a href="#" className="hover:text-gray-700 flex items-center">
+                            <a href="/" className="hover:text-primary flex items-center">
                                 <IoHome className="flex-shrink-0 h-5 w-5" />
                                 <span className="sr-only">Home</span>
                             </a>
                         </li>
                         <li className="flex items-center">
                             <IoChevronForward className="flex-shrink-0 h-5 w-5" />
-                            <a href="#" className="ml-2 hover:text-gray-700">Car Rentals</a>
-                        </li>
-                        <li className="flex items-center">
-                            <IoChevronForward className="flex-shrink-0 h-5 w-5" />
-                            <span className="ml-2 text-gray-700 font-medium">Listings</span>
+                            <span className="ml-2 text-gray-700 font-medium">Cars</span>
                         </li>
                     </ol>
                 </nav>
@@ -56,9 +55,11 @@ const Car = () => {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="all">All Types</SelectItem>
-                                <SelectItem value="Sedan">Sedan</SelectItem>
-                                <SelectItem value="SUV">SUV</SelectItem>
-                                <SelectItem value="Electric">Electric</SelectItem>
+                                {
+                                    uniqueCarTypes?.map((type: string, idx: number) => (
+                                        <SelectItem key={idx} value={type}>{type}</SelectItem>
+                                    ))
+                                }
                             </SelectContent>
                         </Select>
                     </div>
@@ -66,11 +67,11 @@ const Car = () => {
 
                 {/* Car Listings */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {data?.data.map((car: TSingleCar) => (
+                    {allCars?.map((car: TSingleCar) => (
                         <CarCard key={car._id} car={car} />
                     ))}
                 </div>
-                {data?.data.length === 0 && (
+                {allCars?.length === 0 && (
                     <p className="text-center text-gray-600 mt-8 text-xl">No cars available for the selected type.</p>
                 )}
             </div>

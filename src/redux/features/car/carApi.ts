@@ -5,7 +5,15 @@ const carApi = baseApi.injectEndpoints({
         // get all cars
         getAllCars: builder.query({
             query: ({ carType = '' }) => ({
-                url: `/cars?carType=${carType}`,
+                url: `/cars?carType=${carType === "all" ? "" : carType}`,
+                method: "GET"
+            })
+        }),
+
+        // get single car
+        getSingleCar: builder.query({
+            query: (id) => ({
+                url: `/cars/${id}`,
                 method: "GET"
             })
         })
@@ -13,5 +21,6 @@ const carApi = baseApi.injectEndpoints({
 });
 
 export const {
-    useGetAllCarsQuery
+    useGetAllCarsQuery,
+    useGetSingleCarQuery
 } = carApi;
