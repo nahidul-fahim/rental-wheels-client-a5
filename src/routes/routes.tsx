@@ -6,6 +6,7 @@ import Signup from "@/pages/auth/Signup";
 import Car from "@/pages/car/Car";
 import CarDetails from "@/pages/carDetails/CarDetails";
 import Home from "@/pages/home/Home";
+import UserDashboard from "@/pages/userDashboard/UserDashboard";
 import { createBrowserRouter } from "react-router-dom";
 
 
@@ -40,6 +41,11 @@ const router = createBrowserRouter([
     {
         path: "/signup",
         element: <Signup />
+    },
+    // user dashboard
+    {
+        path: "/dashboard",
+        element: <UserDashboard />
     },
 ]);
 
