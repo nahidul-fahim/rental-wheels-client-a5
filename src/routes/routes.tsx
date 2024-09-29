@@ -1,5 +1,6 @@
 import App from "@/App";
 import ErrorPage from "@/components/error/ErrorPage";
+import UserRoute from "@/components/layout/UserRoute";
 import About from "@/pages/about/About";
 import Signin from "@/pages/auth/Signin";
 import Signup from "@/pages/auth/Signup";
@@ -45,7 +46,7 @@ const router = createBrowserRouter([
     // user dashboard
     {
         path: "/dashboard",
-        element: <UserDashboard />
+        element: <UserRoute><UserDashboard /></UserRoute>
     },
 ]);
 
