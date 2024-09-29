@@ -1,13 +1,12 @@
 import App from "@/App";
 import ErrorPage from "@/components/error/ErrorPage";
-import UserRoute from "@/components/layout/UserRoute";
+import DashboardRouter from "@/components/layout/DashboardRouter";
 import About from "@/pages/about/About";
 import Signin from "@/pages/auth/Signin";
 import Signup from "@/pages/auth/Signup";
 import Car from "@/pages/car/Car";
 import CarDetails from "@/pages/carDetails/CarDetails";
 import Home from "@/pages/home/Home";
-import UserDashboard from "@/pages/userDashboard/UserDashboard";
 import { createBrowserRouter } from "react-router-dom";
 
 
@@ -43,10 +42,10 @@ const router = createBrowserRouter([
         path: "/signup",
         element: <Signup />
     },
-    // user dashboard
+    // dashboard
     {
         path: "/dashboard",
-        element: <UserRoute><UserDashboard /></UserRoute>
+        element: <DashboardRouter />
     },
 ]);
 
