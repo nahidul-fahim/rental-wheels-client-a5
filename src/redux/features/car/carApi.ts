@@ -1,7 +1,30 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { baseApi } from "@/redux/api/baseApi";
 
 const carApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
+        // add a car
+        addCar: builder.mutation({
+            query: ({ carData, token }: { carData: any, token: string }) => ({
+                url: `/cars`,
+                method: "POST",
+                body: carData,
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+        }),
+        // update a car
+        updateCar: builder.mutation({
+            query: ({ id, carData, token }: { id: string, carData: any, token: string }) => ({
+                url: `/cars/${id}`,
+                method: "PUT",
+                body: carData,
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+        }),
         // get all cars
         getAllCars: builder.query({
             query: ({ carType = '' }) => ({
@@ -9,7 +32,6 @@ const carApi = baseApi.injectEndpoints({
                 method: "GET"
             })
         }),
-
         // get single car
         getSingleCar: builder.query({
             query: (id) => ({
@@ -22,5 +44,7 @@ const carApi = baseApi.injectEndpoints({
 
 export const {
     useGetAllCarsQuery,
-    useGetSingleCarQuery
+    useGetSingleCarQuery,
+    useAddCarMutation,
+    useUpdateCarMutation
 } = carApi;

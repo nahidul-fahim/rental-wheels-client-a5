@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 
 type TSelectFieldProps = {
@@ -8,7 +10,6 @@ type TSelectFieldProps = {
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-
 const RHFileSelect = ({ name, placeholder, label, className, onChange }: TSelectFieldProps) => {
     const { control } = useFormContext();
 
@@ -18,7 +19,7 @@ const RHFileSelect = ({ name, placeholder, label, className, onChange }: TSelect
             <Controller
                 name={name}
                 control={control}
-                render={({ field: { onChange: fieldOnChange, ...rest } }) => (
+                render={({ field: { onChange: fieldOnChange, value, ...rest } }) => (
                     <input
                         type="file"
                         id={name}
