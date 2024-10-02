@@ -14,12 +14,12 @@ const AdminDashboard: React.FC = () => {
             <Card>
                 <CardContent className="p-6">
                     <Tabs defaultValue="overview" className="space-y-4">
-                        <TabsList className="grid w-full grid-cols-5 gap-4">
-                            <TabsTrigger value="overview">Overview</TabsTrigger>
-                            <TabsTrigger value="cars">Manage Cars</TabsTrigger>
-                            <TabsTrigger value="bookings">Manage Bookings</TabsTrigger>
-                            <TabsTrigger value="returns">Manage Returns</TabsTrigger>
-                            <TabsTrigger value="users">User Management</TabsTrigger>
+                        <TabsList className="flex flex-wrap gap-4 flex-row">
+                            <TabsTrigger value="overview" className="flex-1 min-w-[120px]">Overview</TabsTrigger>
+                            <TabsTrigger value="cars" className="flex-1 min-w-[120px]">Manage Cars</TabsTrigger>
+                            <TabsTrigger value="bookings" className="flex-1 min-w-[120px]">Manage Bookings</TabsTrigger>
+                            <TabsTrigger value="returns" className="flex-1 min-w-[120px]">Manage Returns</TabsTrigger>
+                            <TabsTrigger value="users" className="flex-1 min-w-[120px]">User Management</TabsTrigger>
                         </TabsList>
                         <TabsContent value="overview"><DashboardOverview /></TabsContent>
                         <TabsContent value="cars"><ManageCars /></TabsContent>
