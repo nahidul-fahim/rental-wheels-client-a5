@@ -25,6 +25,17 @@ const carApi = baseApi.injectEndpoints({
                 }
             })
         }),
+        // return a car
+        returnCar: builder.mutation({
+            query: ({ token, returnData }: { token: string, returnData: Record<string, any> }) => ({
+                url: `/cars/return`,
+                method: "PUT",
+                body: returnData,
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+        }),
         // get all cars
         getAllCars: builder.query({
             query: ({ carType = '' }) => ({
@@ -38,13 +49,14 @@ const carApi = baseApi.injectEndpoints({
                 url: `/cars/${id}`,
                 method: "GET"
             })
-        })
+        }),
     })
 });
 
 export const {
     useGetAllCarsQuery,
     useGetSingleCarQuery,
+    useReturnCarMutation,
     useAddCarMutation,
     useUpdateCarMutation
 } = carApi;

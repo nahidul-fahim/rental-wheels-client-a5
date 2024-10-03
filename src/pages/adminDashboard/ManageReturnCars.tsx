@@ -1,26 +1,63 @@
-import React from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
-interface BookedCar {
-    id: string;
-    carName: string;
-    userName: string;
-    startDate: string;
-    endDate: string;
-    status: 'In Use' | 'Overdue';
-}
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import useToken from '@/hooks/useToken';
+import { useAllBookingsQuery } from '@/redux/features/bookings/bookingsApi';
+import { useReturnCarMutation } from '@/redux/features/car/carApi';
+import { toast } from 'sonner';
 
 const ManageReturnCars: React.FC = () => {
-    const bookedCars: BookedCar[] = [
-        { id: '1', carName: 'Tesla Model 3', userName: 'John Doe', startDate: '2024-10-01', endDate: '2024-10-05', status: 'In Use' },
-        { id: '2', carName: 'BMW X5', userName: 'Jane Smith', startDate: '2024-09-28', endDate: '2024-10-02', status: 'Overdue' },
-    ];
+    const token = useToken();
+    const { data, isLoading, refetch } = useAllBookingsQuery({ token: token as string });
+    const [returnCar, { isLoading: isReturnCarLoading }] = useReturnCarMutation();
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [endTime, setEndTime] = useState('');
+    const [bookingId, setBookingId] = useState('');
 
-    const handleReturn = (id: string) => {
-        console.log('Return car', id);
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    const bookings = data?.data;
+
+    // open the dialog
+    const handleReturnClick = (id: string) => {
+        setIsDialogOpen(true);
+        setBookingId(id);
+    };
+
+    // save the end time
+    const handleEndTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setEndTime(value);
+    }
+
+    // return the car
+    const handleReturn = async () => {
+        const toastId = toast.loading("Returning car...");
+        if (endTime) {
+            const returnData = {
+                bookingId,
+                endTime
+            }
+            const res = await returnCar({ token: token as string, returnData: returnData });
+            if (res?.data?.success) {
+                toast.success("Car returned successfully", { id: toastId, duration: 3000 });
+                refetch();
+                setIsDialogOpen(false);
+            }
+            else {
+                toast.error("Failed to return car", { id: toastId, duration: 3000 });
+            }
+        }
+        else {
+            toast.error("Please select a valid end time", { id: toastId, duration: 3000 });
+        }
     };
 
     return (
@@ -34,30 +71,66 @@ const ManageReturnCars: React.FC = () => {
                         <TableRow>
                             <TableHead>Car</TableHead>
                             <TableHead>User</TableHead>
-                            <TableHead>Start Date</TableHead>
-                            <TableHead>End Date</TableHead>
+                            <TableHead>Date</TableHead>
+                            <TableHead>Start Time</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead>Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {bookedCars.map((car) => (
-                            <TableRow key={car.id}>
-                                <TableCell>{car.carName}</TableCell>
-                                <TableCell>{car.userName}</TableCell>
-                                <TableCell>{car.startDate}</TableCell>
-                                <TableCell>{car.endDate}</TableCell>
+                        {bookings?.map((booking: any) => (
+                            <TableRow key={booking._id}>
+                                <TableCell>{booking?.car?.name}</TableCell>
+                                <TableCell>{booking?.user?.name}</TableCell>
+                                <TableCell>{booking?.date}</TableCell>
+                                <TableCell>{booking?.startTime}</TableCell>
                                 <TableCell>
-                                    <Badge variant={car.status === 'In Use' ? 'success' : 'destructive'}>{car.status}</Badge>
+                                    <Badge className='capitalize' variant={booking?.status === 'approved' ? 'success' : 'warning'}>{booking.status}</Badge>
                                 </TableCell>
                                 <TableCell>
-                                    <Button onClick={() => handleReturn(car.id)} variant="outline" size="sm">Return Car</Button>
+                                    {
+                                        (booking?.status === "approved" && booking?.endTime === null) &&
+                                        <Button
+                                            onClick={() => handleReturnClick(booking?._id)}
+                                            variant="outline"
+                                            size="sm"
+                                            disabled={isReturnCarLoading}
+                                        >
+                                            Return Car
+                                        </Button>
+                                    }
                                 </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </CardContent>
+
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Return Car</DialogTitle>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <label htmlFor="endTime" className="text-right">
+                                End Time <span className="text-sm text-gray-500">(24-hour)</span>
+                            </label>
+                            <Input
+                                id="endTime"
+                                type="time"
+                                placeholder="HH:MM"
+                                maxLength={5}
+                                className="col-span-3"
+                                onChange={handleEndTimeChange}
+                            />
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button onClick={handleReturn} disabled={isReturnCarLoading}>Confirm Return</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </Card>
     );
 };

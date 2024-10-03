@@ -1,25 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useAllBookingsQuery } from '@/redux/features/bookings/bookingsApi';
+import { useAllBookingsQuery, useUpdateBookingStatusMutation } from '@/redux/features/bookings/bookingsApi';
 import useToken from '@/hooks/useToken';
-
-interface Booking {
-    id: string;
-    carName: string;
-    userName: string;
-    startDate: string;
-    endDate: string;
-    status: 'Pending' | 'Approved' | 'Cancelled';
-}
+import { toast } from 'sonner';
 
 const ManageBookings: React.FC = () => {
     const token = useToken();
-    const { data, isLoading } = useAllBookingsQuery({ token: token as string });
-
-    console.log("All booking =>", data);
+    const { data, isLoading, refetch } = useAllBookingsQuery({ token: token as string });
+    const [updateBookingStatus, { isLoading: isUpdating }] = useUpdateBookingStatusMutation();
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -27,12 +19,32 @@ const ManageBookings: React.FC = () => {
 
     const bookings = data?.data;
 
-    const handleApprove = (id: string) => {
-        console.log('Approve booking', id);
+    const handleApprove = async (id: string) => {
+        const toastId = toast.loading('Approving booking...');
+        const updatedStatus = {
+            status: 'approved'
+        };
+        const res = await updateBookingStatus({ token: token as string, bookingId: id, updatedInfo: updatedStatus }).unwrap();
+        if (res.success) {
+            refetch();
+            toast.success('Booking approved', { id: toastId, duration: 2000 });
+        } else {
+            toast.error('Failed to approve booking', { id: toastId, duration: 2000 });
+        }
     };
 
-    const handleCancel = (id: string) => {
-        console.log('Cancel booking', id);
+    const handleCancel = async (id: string) => {
+        const toastId = toast.loading('Cancelling booking...');
+        const updatedStatus = {
+            status: 'cancelled'
+        };
+        const res = await updateBookingStatus({ token: token as string, bookingId: id, updatedInfo: updatedStatus }).unwrap();
+        if (res.success) {
+            refetch();
+            toast.success('Booking cancelled', { id: toastId, duration: 2000 });
+        } else {
+            toast.error('Failed to cancel booking', { id: toastId, duration: 2000 });
+        }
     };
 
     return (
@@ -46,27 +58,49 @@ const ManageBookings: React.FC = () => {
                         <TableRow>
                             <TableHead>Car</TableHead>
                             <TableHead>User</TableHead>
-                            <TableHead>Start Date</TableHead>
-                            <TableHead>End Date</TableHead>
+                            <TableHead>Date</TableHead>
+                            <TableHead>Start Time</TableHead>
+                            <TableHead>End Time</TableHead>
+                            <TableHead>Price per hour</TableHead>
+                            <TableHead>Total Cost</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead>Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {bookings.map((booking) => (
+                        {bookings.map((booking: any) => (
                             <TableRow key={booking._id}>
                                 <TableCell>{booking?.car?.name}</TableCell>
                                 <TableCell>{booking?.user?.name}</TableCell>
                                 <TableCell>{booking?.date}</TableCell>
-                                <TableCell>{booking?.end}</TableCell>
+                                <TableCell>{booking?.startTime}</TableCell>
+                                <TableCell>{booking?.endTime}</TableCell>
+                                <TableCell>${booking?.car?.pricePerHour}</TableCell>
+                                <TableCell>${booking?.totalCost}</TableCell>
                                 <TableCell>
-                                    <Badge variant={booking.status === 'Approved' ? 'success' : 'warning'}>{booking.status}</Badge>
+                                    <Badge className='capitalize' variant={booking?.status === 'approved' ? 'success' : 'warning'}>{booking.status}</Badge>
                                 </TableCell>
                                 <TableCell>
-                                    {booking.status === 'Pending' && (
+                                    {booking.status.toLowerCase() === 'pending' && (
                                         <>
-                                            <Button onClick={() => handleApprove(booking.id)} variant="outline" size="sm" className="mr-2">Approve</Button>
-                                            <Button onClick={() => handleCancel(booking.id)} variant="destructive" size="sm">Cancel</Button>
+                                            <Button
+                                                onClick={() => handleApprove(booking._id)}
+                                                variant="outline"
+                                                size="sm"
+                                                className="mr-2"
+                                                disabled={isUpdating}
+                                            >
+                                                Approve
+                                            </Button>
+
+                                            <Button
+                                                onClick={() => handleCancel(booking._id)}
+                                                variant="destructive"
+                                                size="sm"
+                                                disabled={isUpdating}
+                                            >
+                                                Cancel
+                                            </Button>
                                         </>
                                     )}
                                 </TableCell>
