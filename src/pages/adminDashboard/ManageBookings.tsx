@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useAllBookingsQuery } from '@/redux/features/bookings/bookingsApi';
+import useToken from '@/hooks/useToken';
 
 interface Booking {
     id: string;
@@ -14,10 +16,16 @@ interface Booking {
 }
 
 const ManageBookings: React.FC = () => {
-    const bookings: Booking[] = [
-        { id: '1', carName: 'Tesla Model 3', userName: 'John Doe', startDate: '2024-10-01', endDate: '2024-10-05', status: 'Pending' },
-        { id: '2', carName: 'BMW X5', userName: 'Jane Smith', startDate: '2024-10-10', endDate: '2024-10-15', status: 'Approved' },
-    ];
+    const token = useToken();
+    const { data, isLoading } = useAllBookingsQuery({ token: token as string });
+
+    console.log("All booking =>", data);
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    const bookings = data?.data;
 
     const handleApprove = (id: string) => {
         console.log('Approve booking', id);
@@ -46,11 +54,11 @@ const ManageBookings: React.FC = () => {
                     </TableHeader>
                     <TableBody>
                         {bookings.map((booking) => (
-                            <TableRow key={booking.id}>
-                                <TableCell>{booking.carName}</TableCell>
-                                <TableCell>{booking.userName}</TableCell>
-                                <TableCell>{booking.startDate}</TableCell>
-                                <TableCell>{booking.endDate}</TableCell>
+                            <TableRow key={booking._id}>
+                                <TableCell>{booking?.car?.name}</TableCell>
+                                <TableCell>{booking?.user?.name}</TableCell>
+                                <TableCell>{booking?.date}</TableCell>
+                                <TableCell>{booking?.end}</TableCell>
                                 <TableCell>
                                     <Badge variant={booking.status === 'Approved' ? 'success' : 'warning'}>{booking.status}</Badge>
                                 </TableCell>

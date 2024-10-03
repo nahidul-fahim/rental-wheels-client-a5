@@ -10,12 +10,12 @@ const BookingManagement = () => {
     { id: 3, carName: 'Ford Mustang', startDate: '2024-10-10', endDate: '2024-10-15', status: 'Upcoming' },
   ]);
 
-  const handleModifyBooking = (id) => {
+  const handleModifyBooking = (id: string) => {
     // Implement modify booking logic
     console.log('Modify booking', id);
   };
 
-  const handleCancelBooking = (id) => {
+  const handleCancelBooking = (id: string) => {
     // Implement cancel booking logic
     console.log('Cancel booking', id);
   };
