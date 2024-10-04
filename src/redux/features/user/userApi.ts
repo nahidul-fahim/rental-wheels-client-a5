@@ -14,6 +14,16 @@ const userApi = baseApi.injectEndpoints({
                 }
             }),
         }),
+        // get all users
+        getAllUsers: builder.query({
+            query: ({ token }: { token: string }) => ({
+                url: `/users`,
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }),
+        }),
         // update user
         updateUser: builder.mutation({
             query: ({ id, updatedData, token }: { id: string, updatedData: Record<string, any>, token: string }) => ({
@@ -30,5 +40,6 @@ const userApi = baseApi.injectEndpoints({
 
 export const {
     useGetUserQuery,
+    useGetAllUsersQuery,
     useUpdateUserMutation,
 } = userApi;

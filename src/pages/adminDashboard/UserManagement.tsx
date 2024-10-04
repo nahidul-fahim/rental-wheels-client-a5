@@ -4,9 +4,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import useToken from '@/hooks/useToken';
+import { useGetAllUsersQuery } from '@/redux/features/user/userApi';
 
 interface User {
-    id: string;
+    _id: string;
     name: string;
     email: string;
     role: 'user' | 'admin';
@@ -14,11 +16,8 @@ interface User {
 }
 
 const UserManagement: React.FC = () => {
-    const users: User[] = [
-        { id: '1', name: 'John Doe', email: 'john@example.com', role: 'user', isActive: true },
-        { id: '2', name: 'Jane Smith', email: 'jane@example.com', role: 'admin', isActive: true },
-        { id: '3', name: 'Bob Johnson', email: 'bob@example.com', role: 'user', isActive: false },
-    ];
+    const token = useToken();
+    const { data, isLoading } = useGetAllUsersQuery({ token: token as string });
 
     const handleToggleActive = (id: string) => {
         console.log('Toggle active for user', id);
@@ -27,6 +26,13 @@ const UserManagement: React.FC = () => {
     const handleChangeRole = (id: string) => {
         console.log('Change role for user', id);
     };
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    const users = data?.data;
+    console.log("All users", users);
 
     return (
         <Card>
@@ -46,18 +52,18 @@ const UserManagement: React.FC = () => {
                     </TableHeader>
                     <TableBody>
                         {users.map((user) => (
-                            <TableRow key={user.id}>
+                            <TableRow key={user._id}>
                                 <TableCell>{user.name}</TableCell>
                                 <TableCell>{user.email}</TableCell>
                                 <TableCell>
-                                    <Badge variant={user.role === 'admin' ? 'default' : 'secondary'}>
+                                    <Badge className='capitalize' variant={user.role === 'admin' ? 'default' : 'secondary'}>
                                         {user.role}
                                     </Badge>
                                 </TableCell>
                                 <TableCell>
                                     <Switch
                                         checked={user.isActive}
-                                        onCheckedChange={() => handleToggleActive(user.id)}
+                                        onCheckedChange={() => handleToggleActive(user._id)}
                                     />
                                 </TableCell>
                                 <TableCell>
