@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -5,26 +6,36 @@ import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import useToken from '@/hooks/useToken';
-import { useGetAllUsersQuery } from '@/redux/features/user/userApi';
-
-interface User {
-    _id: string;
-    name: string;
-    email: string;
-    role: 'user' | 'admin';
-    isActive: boolean;
-}
+import { useGetAllUsersQuery, useUpdateUserStatusMutation } from '@/redux/features/user/userApi';
+import { toast } from 'sonner';
 
 const UserManagement: React.FC = () => {
     const token = useToken();
-    const { data, isLoading } = useGetAllUsersQuery({ token: token as string });
+    const { data, isLoading, refetch } = useGetAllUsersQuery({ token: token as string });
+    const [updateUserStatus, { isLoading: isUpdating }] = useUpdateUserStatusMutation();
 
-    const handleToggleActive = (id: string) => {
-        console.log('Toggle active for user', id);
+    // toggle user status
+    const handleToggleActive = async (id: string, isActive: boolean) => {
+        const toastId = toast.loading('Updating user status...');
+        const res = await updateUserStatus({ id, updatedData: { isActive: !isActive }, token: token as string });
+        if (res?.data?.success) {
+            refetch();
+            toast.success('User status updated successfully', { id: toastId, duration: 2000 });
+        } else {
+            toast.error('Failed to update user status', { id: toastId, duration: 2000 });
+        }
     };
 
-    const handleChangeRole = (id: string) => {
-        console.log('Change role for user', id);
+    // handle change role
+    const handleChangeRole = async (id: string, role: string) => {
+        const toastId = toast.loading('Updating user role...');
+        const res = await updateUserStatus({ id, updatedData: { role: role === 'user' ? 'admin' : 'user' }, token: token as string });
+        if (res?.data?.success) {
+            refetch();
+            toast.success('User role updated successfully', { id: toastId, duration: 2000 });
+        } else {
+            toast.error('Failed to update user role', { id: toastId, duration: 2000 });
+        }
     };
 
     if (isLoading) {
@@ -32,7 +43,6 @@ const UserManagement: React.FC = () => {
     }
 
     const users = data?.data;
-    console.log("All users", users);
 
     return (
         <Card>
@@ -51,7 +61,7 @@ const UserManagement: React.FC = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {users.map((user) => (
+                        {users.map((user: any) => (
                             <TableRow key={user._id}>
                                 <TableCell>{user.name}</TableCell>
                                 <TableCell>{user.email}</TableCell>
@@ -62,15 +72,17 @@ const UserManagement: React.FC = () => {
                                 </TableCell>
                                 <TableCell>
                                     <Switch
+                                        disabled={isUpdating}
                                         checked={user.isActive}
-                                        onCheckedChange={() => handleToggleActive(user._id)}
+                                        onCheckedChange={() => handleToggleActive(user._id, user.isActive)}
                                     />
                                 </TableCell>
                                 <TableCell>
-                                    <Button 
-                                        onClick={() => handleChangeRole(user.id)} 
-                                        variant="outline" 
+                                    <Button
+                                        onClick={() => handleChangeRole(user._id, user.role)}
+                                        variant="outline"
                                         size="sm"
+                                        disabled={isUpdating}
                                     >
                                         Change to {user.role === 'user' ? 'Admin' : 'User'}
                                     </Button>

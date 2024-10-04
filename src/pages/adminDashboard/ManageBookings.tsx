@@ -68,7 +68,7 @@ const ManageBookings: React.FC = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {bookings.map((booking: any) => (
+                        {bookings?.map((booking: any) => (
                             <TableRow key={booking._id}>
                                 <TableCell>{booking?.car?.name}</TableCell>
                                 <TableCell>{booking?.user?.name}</TableCell>
