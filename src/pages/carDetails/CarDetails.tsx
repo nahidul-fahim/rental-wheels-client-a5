@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
-import { IoHome, IoChevronForward, IoCarSport, IoSpeedometer, IoPeople, IoCalendarNumber, IoShieldCheckmark, IoStar } from "react-icons/io5";
+import { IoHome, IoChevronForward, IoCarSport, IoSpeedometer, IoPeople, IoCalendarNumber, IoShieldCheckmark, IoStar, IoInformationCircle } from "react-icons/io5";
 import { useGetSingleCarQuery } from '@/redux/features/car/carApi';
 import { useParams } from 'react-router-dom';
 
@@ -12,11 +12,11 @@ const CarDetails = () => {
     const { id } = useParams();
     const { data, isLoading } = useGetSingleCarQuery(id);
 
-    const [selectedExtras, setSelectedExtras] = useState([]);
+    const [selectedExtras, setSelectedExtras] = useState<string[]>([]);
 
-    const handleExtraToggle = (value) => {
+    const handleExtraToggle = (value: any) => {
         setSelectedExtras(prev =>
-            prev.includes(value) ? prev.filter(item => item !== value) : [...prev, value]
+            prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
         );
     };
 
@@ -63,11 +63,12 @@ const CarDetails = () => {
                         </Card>
 
                         <Tabs defaultValue="overview" className="w-full">
-                            <TabsList className="grid w-full grid-cols-4">
+                            <TabsList className="grid w-full grid-cols-5">
                                 <TabsTrigger value="overview">Overview</TabsTrigger>
                                 <TabsTrigger value="features">Features</TabsTrigger>
                                 <TabsTrigger value="specs">Specs</TabsTrigger>
                                 <TabsTrigger value="reviews">Reviews</TabsTrigger>
+                                <TabsTrigger value="details">Details</TabsTrigger>
                             </TabsList>
                             <TabsContent value="overview" className="mt-4">
                                 <Card>
@@ -82,7 +83,7 @@ const CarDetails = () => {
                                     <CardContent className="p-6">
                                         <h3 className="text-2xl font-semibold mb-4">Features</h3>
                                         <ul className="list-disc pl-5">
-                                            {carDetails?.features?.map((feature: string[], index: number) => (
+                                            {carDetails?.features?.map((feature: string, index: number) => (
                                                 <li key={index} className="text-gray-600 mb-2">{feature}</li>
                                             ))}
                                         </ul>
@@ -138,6 +139,41 @@ const CarDetails = () => {
                                     </CardContent>
                                 </Card>
                             </TabsContent>
+                            <TabsContent value="details" className="mt-4">
+                                <Card>
+                                    <CardContent className="p-6">
+                                        <h3 className="text-2xl font-semibold mb-4">Car Details</h3>
+                                        <div className="space-y-6">
+                                            <div>
+                                                <h4 className="text-xl font-semibold mb-2">Features</h4>
+                                                <ul className="list-disc pl-5">
+                                                    {carDetails?.features?.map((feature: string, index: number) => (
+                                                        <li key={index} className="text-gray-600 mb-2">{feature}</li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h4 className="text-xl font-semibold mb-2">Insurance Options</h4>
+                                                <p className="text-gray-600">We offer comprehensive insurance coverage for your peace of mind. Options include:</p>
+                                                <ul className="list-disc pl-5 mt-2">
+                                                    <li className="text-gray-600">Basic Coverage: Included in the rental price</li>
+                                                    <li className="text-gray-600">Premium Coverage: Additional $20/day for extra protection</li>
+                                                    <li className="text-gray-600">Full Coverage: Additional $35/day for complete peace of mind</li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h4 className="text-xl font-semibold mb-2">Cancellation Policy</h4>
+                                                <p className="text-gray-600">We understand that plans can change. Our cancellation policy is as follows:</p>
+                                                <ul className="list-disc pl-5 mt-2">
+                                                    <li className="text-gray-600">Free cancellation up to 48 hours before pickup</li>
+                                                    <li className="text-gray-600">50% refund for cancellations between 48 and 24 hours before pickup</li>
+                                                    <li className="text-gray-600">No refund for cancellations less than 24 hours before pickup</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </TabsContent>
                         </Tabs>
                     </div>
 
@@ -162,9 +198,14 @@ const CarDetails = () => {
                                     ))}
                                 </div>
 
-                                <Button className="w-full">
+                                <Button className="w-full mb-4">
                                     <IoShieldCheckmark className="mr-2 text-lg" /> Book Now
                                 </Button>
+
+                                <div className="text-sm text-gray-500 flex items-center">
+                                    <IoInformationCircle className="mr-1" />
+                                    <span>Free cancellation up to 48 hours before pickup</span>
+                                </div>
                             </CardContent>
                         </Card>
                     </div>

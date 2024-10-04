@@ -4,6 +4,7 @@ import DashboardRouter from "@/components/layout/DashboardRouter";
 import About from "@/pages/about/About";
 import Signin from "@/pages/auth/Signin";
 import Signup from "@/pages/auth/Signup";
+import Booking from "@/pages/booking/Booking";
 import Car from "@/pages/car/Car";
 import CarDetails from "@/pages/carDetails/CarDetails";
 import Home from "@/pages/home/Home";
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
             {
                 path: "/cars/:id",
                 element: <CarDetails />
+            },
+            {
+                path: "/booking",
+                element: <Booking />
             }
         ]
     },
