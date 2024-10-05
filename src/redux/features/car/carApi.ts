@@ -38,10 +38,22 @@ const carApi = baseApi.injectEndpoints({
         }),
         // get all cars
         getAllCars: builder.query({
-            query: ({ carType = '' }) => ({
-                url: `/cars?carType=${carType === "all" ? "" : carType}`,
-                method: "GET"
-            })
+            query: ({ carType = '', searchTerm = '', minPricePerHour = 0, maxPricePerHour = 0 }) => {
+                let queryString = `/cars?minPricePerHour=${minPricePerHour}`;
+                if (searchTerm !== '') {
+                    queryString += `&searchTerm=${searchTerm}`;
+                }
+                if (maxPricePerHour > 0) {
+                    queryString += `&maxPricePerHour=${maxPricePerHour}`;
+                }
+                if (carType !== 'all' && carType !== '') {
+                    queryString += `&carType=${carType}`;
+                }
+                return {
+                    url: queryString,
+                    method: "GET"
+                }
+            }
         }),
         // get single car
         getSingleCar: builder.query({

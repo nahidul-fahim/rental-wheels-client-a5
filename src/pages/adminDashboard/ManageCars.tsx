@@ -26,9 +26,8 @@ interface Car {
 }
 
 const ManageCars: React.FC = () => {
-    const carType = "all";
     const token = useToken();
-    const { isLoading, data, refetch } = useGetAllCarsQuery({ carType });
+    const { isLoading, data, refetch } = useGetAllCarsQuery({ carType: '' });
     const [addCar] = useAddCarMutation();
     const [updateCar] = useUpdateCarMutation();
     const [isAddingCar, setIsAddingCar] = useState(false);

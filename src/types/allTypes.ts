@@ -9,6 +9,7 @@ export type TSingleCar = {
     pricePerHour: number;
     image: string;
     status: string;
+    reviews?: string[];
     isDeleted: boolean;
     createdAt: string;
     updatedAt: string;

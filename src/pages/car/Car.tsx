@@ -7,7 +7,6 @@ import CarCard from '@/components/carCard/CarCard';
 
 const Car = () => {
     const [carType, setCarType] = useState('');
-
     const { isLoading, data } = useGetAllCarsQuery({ carType });
 
     if (isLoading) return <div>Loading...</div>

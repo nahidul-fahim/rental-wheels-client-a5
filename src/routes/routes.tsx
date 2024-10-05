@@ -1,6 +1,7 @@
 import App from "@/App";
 import ErrorPage from "@/components/error/ErrorPage";
 import DashboardRouter from "@/components/layout/DashboardRouter";
+import ProtectedRoute from "@/components/layout/ProtectedRoute";
 import About from "@/pages/about/About";
 import Signin from "@/pages/auth/Signin";
 import Signup from "@/pages/auth/Signup";
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "/cars/:id",
-                element: <CarDetails />
+                element: <ProtectedRoute><CarDetails /></ProtectedRoute>
             },
             {
                 path: "/booking",

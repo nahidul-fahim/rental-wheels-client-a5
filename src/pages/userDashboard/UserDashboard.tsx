@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,22 +7,16 @@ import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import Overview from './Overview';
 import BookingManagement from './BookingManagement';
 import PaymentManagement from './PaymentManagement';
-import { useAppDispatch } from '@/redux/hooks';
-import { logout } from '@/redux/features/auth/authSlice';
+import useLogout from '@/hooks/useLogout';
 
 const UserDashboard = () => {
-    const dispatch = useAppDispatch();
-    const navigate = useNavigate();
-    const handleLogout = () => {
-        dispatch(logout());
-        navigate('/signin');
-    };
+    const handleLogout = useLogout();
 
     return (
         <div className="container mx-auto p-6">
             <div className="flex justify-between items-center mb-2">
                 <h1 className="text-3xl font-bold text-primary">User Dashboard</h1>
-                <Button variant="outline" onClick={handleLogout}>
+                <Button onClick={() => handleLogout()}>
                     <IoLogOutOutline className="mr-2 text-xl" /> Logout
                 </Button>
             </div>
