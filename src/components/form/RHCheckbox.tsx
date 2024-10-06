@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Controller, useFormContext } from "react-hook-form";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -6,9 +7,10 @@ type TCheckboxProps = {
     name: string;
     label: string;
     className?: string;
+    defaultChecked?: any;
 }
 
-const RHCheckbox = ({ name, label, className }: TCheckboxProps) => {
+const RHCheckbox = ({ name, label, className, defaultChecked }: TCheckboxProps) => {
     const { control } = useFormContext();
 
     return (
@@ -20,6 +22,7 @@ const RHCheckbox = ({ name, label, className }: TCheckboxProps) => {
                     <Checkbox
                         id={name}
                         checked={field.value}
+                        defaultChecked={defaultChecked}
                         onCheckedChange={field.onChange}
                     />
                 )}

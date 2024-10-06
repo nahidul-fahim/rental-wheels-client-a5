@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { IoCarSport, IoSearch } from "react-icons/io5";
+import { IoCarSport, IoChevronForward, IoHome, IoSearch } from "react-icons/io5";
 import { useGetAllCarsQuery } from '@/redux/features/car/carApi';
 import { Link } from 'react-router-dom';
 
@@ -29,7 +29,22 @@ const Booking: React.FC = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-4xl font-bold mb-8 text-primary">Find Your Ideal Ride</h1>
+      <h1 className="text-4xl font-bold mb-4 text-primary">Find Your Ideal Ride</h1>
+      {/* breadcrumb */}
+      <nav className="flex items-center text-gray-500 mb-8" aria-label="Breadcrumb">
+        <ol className="flex items-center space-x-2">
+          <li>
+            <a href="/" className="hover:text-primary flex items-center">
+              <IoHome className="flex-shrink-0 h-5 w-5" />
+              <span className="sr-only">Home</span>
+            </a>
+          </li>
+          <li className="flex items-center">
+            <IoChevronForward className="flex-shrink-0 h-5 w-5" />
+            <span className="ml-2 text-gray-700 font-medium">Booking</span>
+          </li>
+        </ol>
+      </nav>
 
       <Card className="mb-8">
         <CardHeader>

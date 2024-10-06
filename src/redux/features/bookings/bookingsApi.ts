@@ -25,6 +25,17 @@ const bookingsApi = baseApi.injectEndpoints({
             }),
         }),
 
+        // get user bookings
+        userBookings: builder.query({
+            query: ({ token }: { token: string }) => ({
+                url: '/bookings/my-bookings',
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }),
+        }),
+
         // update a booking status
         updateBookingStatus: builder.mutation({
             query: ({ token, bookingId, updatedInfo }: { token: string, bookingId: string, updatedInfo: Record<string, string> }) => ({
@@ -42,5 +53,6 @@ const bookingsApi = baseApi.injectEndpoints({
 export const {
     useCreateBookingMutation,
     useAllBookingsQuery,
+    useUserBookingsQuery,
     useUpdateBookingStatusMutation
 } = bookingsApi;
