@@ -2,6 +2,18 @@ import { baseApi } from "@/redux/api/baseApi";
 
 const bookingsApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
+        // create a booking
+        createBooking: builder.mutation({
+            query: ({ token, bookingData }: { token: string, bookingData: Record<string, unknown> }) => ({
+                url: '/bookings',
+                method: 'POST',
+                body: bookingData,
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }),
+        }),
+
         // get all bookings
         allBookings: builder.query({
             query: ({ token }: { token: string }) => ({
@@ -28,6 +40,7 @@ const bookingsApi = baseApi.injectEndpoints({
 });
 
 export const {
+    useCreateBookingMutation,
     useAllBookingsQuery,
     useUpdateBookingStatusMutation
 } = bookingsApi;

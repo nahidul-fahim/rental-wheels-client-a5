@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
@@ -11,26 +12,72 @@ import SpecsTab from './SpecsTab';
 import ReviewsTab from './ReviewsTab';
 import DetailsTab from './DetailsTab';
 import CarDetailsBreadcrumb from './CarDetailsBreadcrumb';
+import { useCreateBookingMutation } from '@/redux/features/bookings/bookingsApi';
+import useToken from '@/hooks/useToken';
+import { toast } from 'sonner';
+
+interface IBookingDetails {
+    name: string;
+    email: string;
+    phone: string;
+    date: string;
+    startTime: string;
+    nidPassport: string;
+    drivingLicense: string;
+    paymentMethod: string;
+    gpsNavigation?: boolean;
+    childSeat?: boolean;
+    additionalDriver?: boolean;
+}
 
 const CarDetails = () => {
     const { id } = useParams();
+    const token = useToken();
     const { data, isLoading } = useGetSingleCarQuery(id);
     const [bookingStep, setBookingStep] = useState('form');
-    const [bookingDetails, setBookingDetails] = useState(null);
+    const [bookingDetails, setBookingDetails] = useState<IBookingDetails | null>(null);
+    const [createBooking, { isLoading: isBookingLoading }] = useCreateBookingMutation();
 
     if (isLoading) return <div>Loading...</div>;
     const carDetails = data?.data;
 
-    const handleBookingSubmit = (formData) => {
-        console.log("Form data booking details", formData);
+    // submit the booking
+    const handleBookingSubmit = (formData: any) => {
         setBookingDetails(formData);
         setBookingStep('confirmation');
     };
 
-    const handleBookingConfirm = () => {
-        console.log('Booking confirmed:', bookingDetails);
-        setBookingStep('form');
-        setBookingDetails(null);
+    // confirm the booking in the server
+    const handleBookingConfirm = async () => {
+        if (!bookingDetails) return;
+        const toastId = toast.loading("Booking the car!",)
+
+        const bookingData = {
+            carId: carDetails._id,
+            name: bookingDetails?.name,
+            email: bookingDetails?.email,
+            phone: bookingDetails?.phone,
+            date: bookingDetails?.date,
+            nidPassport: bookingDetails?.nidPassport,
+            drivingLicense: bookingDetails?.drivingLicense,
+            startTime: bookingDetails?.startTime,
+            paymentMethod: bookingDetails?.paymentMethod,
+            additionalOptions: {
+                gpsNavigation: bookingDetails?.gpsNavigation,
+                childSeat: bookingDetails?.childSeat,
+                additionalDriver: bookingDetails?.additionalDriver,
+            },
+        };
+        const res = await createBooking({ token: token as string, bookingData });
+        if (res?.data?.success) {
+            toast.success("Booked the car successfully!", { id: toastId, duration: 2000 })
+            setBookingStep('form');
+            setBookingDetails(null);
+        }
+        else {
+            toast.error("Failed to book the car!", { id: toastId, duration: 2000 })
+        }
+
     };
 
     const handleBookingEdit = () => {
@@ -91,6 +138,7 @@ const CarDetails = () => {
                                         carDetails={carDetails}
                                         onConfirm={handleBookingConfirm}
                                         onEdit={handleBookingEdit}
+                                        isBookingLoading={isBookingLoading}
                                     />
                                 )}
                             </CardContent>

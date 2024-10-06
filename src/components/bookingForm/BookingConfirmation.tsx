@@ -2,7 +2,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
-const BookingConfirmation = ({ bookingDetails, carDetails, onConfirm, onEdit }: any) => {
+const BookingConfirmation = ({ bookingDetails, carDetails, onConfirm, onEdit, isBookingLoading }: any) => {
     return (
         <Card>
             <CardContent className="space-y-4">
@@ -41,8 +41,8 @@ const BookingConfirmation = ({ bookingDetails, carDetails, onConfirm, onEdit }: 
                 </div>
 
                 <div className="flex space-x-4">
-                    <Button onClick={onConfirm}>Confirm Booking</Button>
-                    <Button onClick={onEdit} variant="outline">Edit Booking</Button>
+                    <Button onClick={onConfirm} disabled={isBookingLoading}>Confirm Booking</Button>
+                    <Button onClick={onEdit} variant="outline" disabled={isBookingLoading}>Edit Booking</Button>
                 </div>
             </CardContent>
         </Card>
