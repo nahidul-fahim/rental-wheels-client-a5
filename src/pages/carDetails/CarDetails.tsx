@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
@@ -21,17 +20,15 @@ const CarDetails = () => {
 
     if (isLoading) return <div>Loading...</div>;
     const carDetails = data?.data;
-    console.log("car details", carDetails)
 
-    const handleBookingSubmit = (formData: any) => {
+    const handleBookingSubmit = (formData) => {
+        console.log("Form data booking details", formData);
         setBookingDetails(formData);
         setBookingStep('confirmation');
     };
 
     const handleBookingConfirm = () => {
-        // Here you would typically send the booking data to your backend
         console.log('Booking confirmed:', bookingDetails);
-        // Reset the booking process
         setBookingStep('form');
         setBookingDetails(null);
     };
@@ -42,7 +39,6 @@ const CarDetails = () => {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            {/* Header Image Section */}
             <div className="relative h-80 bg-cover bg-center" style={{ backgroundImage: `url(${carDetails.image})` }}>
                 <div className="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center">
                     <h1 className="text-5xl font-bold text-white text-center">{carDetails.name}</h1>
@@ -50,11 +46,9 @@ const CarDetails = () => {
             </div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                {/* Breadcrumb Navigation */}
                 <CarDetailsBreadcrumb carDetails={carDetails} />
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Left Column: Image and Details */}
                     <div className="lg:col-span-2">
                         <Card className="mb-8">
                             <CardContent className="p-6">
@@ -78,7 +72,6 @@ const CarDetails = () => {
                         </Tabs>
                     </div>
 
-                    {/* Right Column: Pricing and Booking */}
                     <div>
                         <Card className="sticky top-8">
                             <CardContent className="p-6">
@@ -89,6 +82,7 @@ const CarDetails = () => {
                                         <BookingForm
                                             carDetails={carDetails}
                                             onSubmit={handleBookingSubmit}
+                                            initialData={bookingDetails}
                                         />
                                     </>
                                 ) : (

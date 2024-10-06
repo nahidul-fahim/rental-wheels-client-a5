@@ -123,6 +123,7 @@ const ManageReturnCars: React.FC = () => {
                                 maxLength={5}
                                 className="col-span-3"
                                 onChange={handleEndTimeChange}
+                                required
                             />
                         </div>
                     </div>

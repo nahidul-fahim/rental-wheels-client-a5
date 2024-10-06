@@ -4,22 +4,19 @@ import React from 'react';
 import { Controller, useFormContext } from "react-hook-form";
 import { Input } from "../ui/input";
 
-type TInputProps = {
-    type: string;
+type TDatePickerProps = {
     name: string;
     placeholder?: string;
     label?: string;
     className?: string;
     defaultValue?: any;
-    step?: number;
-    minValue?: number;
-    maxValue?: number;
     required?: boolean;
-    maxLength?: number;
+    minDate?: string;
+    maxDate?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const RHInput = ({ type, name, placeholder, label, className, defaultValue, step, minValue, maxValue, required = true, maxLength, onChange }: TInputProps) => {
+const RHDatePicker = ({ name, placeholder, label, className, defaultValue, required = true, minDate, maxDate, onChange }: TDatePickerProps) => {
 
     const { control } = useFormContext();
 
@@ -32,15 +29,13 @@ const RHInput = ({ type, name, placeholder, label, className, defaultValue, step
                 render={({ field }) =>
                     <Input
                         {...field}
-                        type={type}
+                        type="date"
                         id={name}
-                        min={minValue}
-                        max={maxValue}
-                        step={step ? step : ".01"}
+                        min={minDate}
+                        max={maxDate}
                         placeholder={placeholder}
                         defaultValue={defaultValue}
                         required={required}
-                        maxLength={maxLength}
                         onChange={(e) => {
                             field.onChange(e);
                             if (onChange) {
@@ -55,4 +50,4 @@ const RHInput = ({ type, name, placeholder, label, className, defaultValue, step
     );
 };
 
-export default RHInput;
+export default RHDatePicker;
