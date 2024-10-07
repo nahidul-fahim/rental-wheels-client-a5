@@ -38,7 +38,7 @@ const bookingsApi = baseApi.injectEndpoints({
 
         // update a booking status
         updateBookingStatus: builder.mutation({
-            query: ({ token, bookingId, updatedInfo }: { token: string, bookingId: string, updatedInfo: Record<string, string> }) => ({
+            query: ({ token, bookingId, updatedInfo }: { token: string, bookingId: string, updatedInfo: Record<string, unknown> }) => ({
                 url: `/bookings/${bookingId}`,
                 method: 'PUT',
                 body: updatedInfo,
