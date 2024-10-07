@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { baseApi } from "@/redux/api/baseApi";
 
-
 const userApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         // get single user

@@ -1,22 +1,38 @@
 import { IoCarSport } from "react-icons/io5";
 import { Button } from "../ui/button";
-import { Card, CardContent, CardFooter } from "../ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { TSingleCar } from "@/types/allTypes";
 import { Link } from "react-router-dom";
+import { Badge } from "../ui/badge";
 
 const CarCard = ({ car }: { car: TSingleCar }) => {
     return (
-        <Card key={car._id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-white flex flex-col h-full shadow-md">
-            <img src={car.image} alt={car.name} className="w-full h-56 object-cover" />
-            <CardContent className="p-6 flex-grow">
-                <h3 className="text-xl font-semibold mb-3 text-secondary">{car.name}</h3>
-                <p className="bg-secondary/10 px-2 py-1/2 rounded text-sm font-medium text-body w-fit mb-3">{car.carType}</p>
-                <p className="text-2xl font-bold text-primary">${car.pricePerHour} <span className="text-sm text-body">per hour</span></p>
+        <Card key={car._id} className="flex flex-col shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <img src={car.image} alt={car.name} className="w-full h-64 object-cover" />
+            <CardHeader>
+                <CardTitle className="flex justify-between items-center">
+                    <span>{car.name}</span>
+                    <Badge variant="secondary">{car.carType}</Badge>
+                </CardTitle>
+            </CardHeader>
+            <CardContent className="flex-grow">
+                <p className="text-sm text-gray-600 mb-4">{(car.description).substring(0, 130)}...</p>
+                <div className="flex flex-wrap gap-x-3 gap-y-2 mb-2">
+                    {car.features.map((feature: string, index: number) => (
+                        <Badge key={index} variant="outline">{feature}</Badge>
+                    ))}
+                </div>
+                <div className="flex items-center justify-between mt-4">
+                    <div className="flex items-center text-primary">
+                        <span className="text-xl font-bold">${car.pricePerHour}</span>
+                        <span className="text-sm ml-1">/ hour</span>
+                    </div>
+                </div>
             </CardContent>
-            <CardFooter className="p-6 mt-auto">
+            <CardFooter>
                 <Link to={`/cars/${car._id}`} className="w-full">
                     <Button className="w-full">
-                        <IoCarSport className="mr-2 text-xl" /> View Details
+                        <IoCarSport className="mr-2 text-xl" /> Book Now
                     </Button>
                 </Link>
             </CardFooter>

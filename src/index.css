@@ -13,3 +13,35 @@
 * {
   font-family: 'Poppins', sans-serif;
 }
+
+::selection {
+  background-color: #ff571f;
+  color: white;
+}
+
+/* button hover and active style using ::after and ::before */
+.menu-link::after {
+  content: '';
+  display: block;
+  height: 2px;
+  width: 0;
+  transition: all 0.4s ease-in;
+  background-color: #ff571f;
+}
+
+.menu-link:hover::after {
+  content: '';
+  display: block;
+  height: 2px;
+  width: 100%;
+  background-color: #ff571f;
+}
+
+.active-menu-link::after {
+  content: '';
+  display: block;
+  height: 2px;
+  width: 100%;
+  transition: all 0.4s ease-in;
+  background-color: #ff571f;
+}

@@ -25,7 +25,6 @@ const Overview: React.FC = () => {
   const { data, isLoading, refetch } = useGetUserQuery({ id: user?.userId as string, token: token as string });
   const [updateUser] = useUpdateUserMutation();
   const { isLoading: userBookingLoading, data: userBookingData } = useUserBookingsQuery({ token: token as string });
-
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState<TUser | null>(null);
 

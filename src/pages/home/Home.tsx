@@ -1,20 +1,22 @@
-import { Search, Star, Phone, Mail, MapPin, Clock, Shield, CarFront, FileText, CreditCard, Info, Check } from 'lucide-react';
+import { IoSearch, IoStar, IoShieldCheckmarkOutline, IoCarOutline, IoDocumentTextOutline, IoCardOutline, IoInformationCircleOutline, IoCheckmarkSharp } from "react-icons/io5";
+import { FaRegClock } from "react-icons/fa6";
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Link } from 'react-router-dom';
+import { useGetAllCarsQuery } from '@/redux/features/car/carApi';
+import CarCard from '@/components/carCard/CarCard';
+import { TSingleCar } from '@/types/allTypes';
+import { Skeleton } from '@/components/ui/skeleton';
+import { AllTestimonials } from "@/static/allTestimonials";
 
 const Home = () => {
-  const featuredCars = [
-    { name: 'Economy Sedan', price: '$30/day', image: '/api/placeholder/300/200', features: ['4 Seats', 'Automatic', 'AC'] },
-    { name: 'Luxury SUV', price: '$80/day', image: '/api/placeholder/300/200', features: ['7 Seats', 'AWD', 'Premium Sound'] },
-    { name: 'Sports Car', price: '$100/day', image: '/api/placeholder/300/200', features: ['2 Seats', 'Manual', 'High Performance'] },
-    { name: 'Electric Hatchback', price: '$50/day', image: '/api/placeholder/300/200', features: ['5 Seats', 'Zero Emissions', 'Long Range'] },
-    { name: 'Minivan', price: '$70/day', image: '/api/placeholder/300/200', features: ['8 Seats', 'Sliding Doors', 'Family Friendly'] },
-    { name: 'Pickup Truck', price: '$90/day', image: '/api/placeholder/300/200', features: ['5 Seats', '4x4', 'Large Cargo Bed'] },
-  ];
+  const carType = "";
+  const { isLoading, data } = useGetAllCarsQuery({ carType });
+  const carLoadingSkeletonNumber = [1, 2, 3, 4, 5, 6];
+
 
   return (
     <div className="min-h-screen font-sans leading-relaxed bg-gray-100 text-gray-800">
@@ -52,7 +54,8 @@ const Home = () => {
             <Input type="date" placeholder="Pick-up Date" className="flex-grow md:flex-1 p-4 border rounded-md shadow-sm" />
             <Input type="date" placeholder="Return Date" className="flex-grow md:flex-1 p-4 border rounded-md shadow-sm" />
             <Button className="w-full md:w-auto bg-primary text-white px-6 py-3 rounded-full flex items-center justify-center shadow-md hover:bg-primary/90 transition-all">
-              <Search className="w-5 h-5 mr-2" />
+              {/* <Search className="w-5 h-5 mr-2" /> */}
+              <IoSearch className='text-xl mr-1' />
               Search Cars
             </Button>
           </CardContent>
@@ -60,45 +63,46 @@ const Home = () => {
       </section>
 
       {/* Featured Cars */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">Featured Cars</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredCars.map((car, index) => (
-              <Card key={index} className="rounded-lg shadow-md overflow-hidden bg-white transition-transform transform hover:-translate-y-2 hover:shadow-xl">
-                <img src={car.image} alt={car.name} className="w-full h-48 object-cover" />
-                <CardHeader className="p-4">
-                  <CardTitle className="text-2xl font-semibold text-gray-900">{car.name}</CardTitle>
-                </CardHeader>
-                <CardContent className="p-4">
-                  <p className="text-gray-600 text-lg mb-4">{car.price}</p>
-                  <ul className="mb-4 space-y-2">
-                    {car.features.map((feature, i) => (
-                      <li key={i} className="flex items-center text-sm text-gray-600">
-                        <CarFront className="w-4 h-4 mr-2 text-primary" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  <Button className="w-full bg-primary text-white rounded-full px-6 py-2 shadow-md hover:bg-primary/90 transition-all">
-                    View Details
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          {
+            isLoading ?
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {
+                  carLoadingSkeletonNumber?.map((skeleton: number) => (
+                    <div key={skeleton} className="flex flex-col space-y-3">
+                      <Skeleton className="h-[200px] w-[90%] rounded-xl" />
+                      <div className="space-y-2">
+                        <Skeleton className="h-4 w-[250px]" />
+                        <Skeleton className="h-4 w-[200px]" />
+                      </div>
+                    </div>
+                  )
+                  )
+                }
+
+              </div>
+              :
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {data?.data?.allCars?.slice(0, 6)?.map((car: TSingleCar) => (
+                  <CarCard key={car._id} car={car} />
+                ))}
+              </div>
+          }
+
         </div>
-      </section>
+      </section >
 
       {/* Why Choose Us */}
-      <section className="py-16 bg-primary text-primary-foreground">
+      <section className="py-16 bg-primary text-primary-foreground" >
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-12 text-white">Why Choose Us?</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { icon: Clock, title: '24/7 Support', description: 'Round-the-clock assistance for your peace of mind.' },
-              { icon: Shield, title: 'Fully Insured', description: 'Comprehensive coverage for worry-free travels.' },
-              { icon: CarFront, title: 'Latest Models', description: 'Access to a fleet of new and well-maintained vehicles.' },
+              { icon: FaRegClock, title: '24/7 Support', description: 'Round-the-clock assistance for your peace of mind.' },
+              { icon: IoShieldCheckmarkOutline, title: 'Fully Insured', description: 'Comprehensive coverage for worry-free travels.' },
+              { icon: IoCarOutline, title: 'Latest Models', description: 'Access to a fleet of new and well-maintained vehicles.' },
             ].map((item, index) => (
               <div key={index} className="text-center p-6 bg-white rounded-lg shadow-md hover:bg-gray-50 transition duration-300">
                 <item.icon className="w-12 h-12 mx-auto mb-4 text-primary" />
@@ -111,26 +115,22 @@ const Home = () => {
       </section>
 
       {/* Customer Testimonials */}
-      <section className="py-16">
+      <section className="py-16" >
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">What Our Customers Say</h2>
-          <Carousel className="max-w-4xl mx-auto">
+          <Carousel className="max-w-4xl mx-auto overflow-x-hidden">
             <CarouselContent>
-              {[
-                { name: 'John Doe', text: '"Exceptional service and a wide range of vehicles to choose from. My go-to car rental service!"' },
-                { name: 'Jane Smith', text: '"The best car rental experience I\'ve ever had. The staff went above and beyond to ensure my satisfaction."' },
-                { name: 'Mike Johnson', text: '"Seamless booking process and top-notch vehicles. I\'ll definitely be a returning customer!"' },
-              ].map((testimonial, index) => (
-                <CarouselItem key={index}>
+              {AllTestimonials.map((testimonial) => (
+                <CarouselItem key={testimonial?.id}>
                   <Card className="bg-white p-8 shadow-lg rounded-lg">
                     <CardContent>
                       <div className="flex items-center mb-6">
-                        <img src={`/api/placeholder/50/50?text=${testimonial.name.charAt(0)}`} alt="Customer" className="w-12 h-12 rounded-full mr-4" />
+                        <img src={testimonial.img} alt="Customer" className="w-12 h-12 rounded-full mr-4" />
                         <div>
                           <h3 className="font-semibold text-lg">{testimonial.name}</h3>
                           <div className="flex text-yellow-400">
                             {[...Array(5)].map((_, i) => (
-                              <Star key={i} className="w-5 h-5 fill-current" />
+                              <IoStar key={i} className='text-lg text-primary mr-0.5' />
                             ))}
                           </div>
                         </div>
@@ -148,10 +148,10 @@ const Home = () => {
       </section>
 
       {/* Contact Section */}
-      <section className="py-16 bg-gray-100">
+      <section className="py-16 bg-gray-100" >
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">Car Rental Tips & Resources</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
             <div className="space-y-6">
               <h3 className="text-2xl font-semibold mb-4">Rental Guide</h3>
               <Accordion type="single" collapsible className="w-full">
@@ -176,13 +176,13 @@ const Home = () => {
               </Accordion>
             </div>
             <div>
-              <h3 className="text-2xl font-semibold mb-4">Helpful Resources</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <h3 className="text-2xl font-semibold mb-6">Helpful Resources</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {[
-                  { icon: FileText, title: 'Rental Policies', description: 'Learn about our policies and procedures.' },
-                  { icon: CreditCard, title: 'Payment Options', description: 'Explore our flexible payment methods.' },
-                  { icon: Info, title: 'FAQ', description: 'Find answers to common questions.' },
-                  { icon: Check, title: 'Booking Checklist', description: 'Ensure a smooth rental experience.' },
+                  { icon: IoDocumentTextOutline, title: 'Rental Policies', description: 'Learn about our policies and procedures.' },
+                  { icon: IoCardOutline, title: 'Payment Options', description: 'Explore our flexible payment methods.' },
+                  { icon: IoInformationCircleOutline, title: 'FAQ', description: 'Find answers to common questions.' },
+                  { icon: IoCheckmarkSharp, title: 'Booking Checklist', description: 'Ensure a smooth rental experience.' },
                 ].map((resource, index) => (
                   <Card key={index} className="bg-white shadow-md hover:shadow-lg transition-shadow">
                     <CardContent className="p-4 flex items-start space-x-4">
@@ -204,7 +204,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-    </div>
+    </div >
   );
 };
 

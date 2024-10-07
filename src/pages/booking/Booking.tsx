@@ -4,10 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { IoCarSport, IoChevronForward, IoHome, IoSearch } from "react-icons/io5";
+import { IoChevronForward, IoHome, IoSearch } from "react-icons/io5";
 import { useGetAllCarsQuery } from '@/redux/features/car/carApi';
-import { Link } from 'react-router-dom';
+import CarCard from '@/components/carCard/CarCard';
 
 const Booking: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -129,37 +128,8 @@ const Booking: React.FC = () => {
               :
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {
-                  allCars.map((car: any) => (
-                    <Card key={car.id} className="flex flex-col overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                      <img src={car.image} alt={car.name} className="w-full h-64 object-cover" />
-                      <CardHeader>
-                        <CardTitle className="flex justify-between items-center">
-                          <span>{car.name}</span>
-                          <Badge variant="secondary">{car.type}</Badge>
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="flex-grow">
-                        <p className="text-sm text-gray-600 mb-4">{(car.description).substring(0, 130)}...</p>
-                        <div className="flex flex-wrap gap-x-3 gap-y-2 mb-2">
-                          {car.features.map((feature: string[], index: number) => (
-                            <Badge key={index} variant="outline">{feature}</Badge>
-                          ))}
-                        </div>
-                        <div className="flex items-center justify-between mt-4">
-                          <div className="flex items-center text-primary">
-                            <span className="text-xl font-bold">${car.pricePerHour}</span>
-                            <span className="text-sm ml-1">/ hour</span>
-                          </div>
-                        </div>
-                      </CardContent>
-                      <CardFooter>
-                        <Link to={`/cars/${car._id}`} className="w-full">
-                          <Button className="w-full">
-                            <IoCarSport className="mr-2 text-xl" /> Book Now
-                          </Button>
-                        </Link>
-                      </CardFooter>
-                    </Card>
+                  allCars.map((car: any, idx: number) => (
+                    <CarCard key={idx} car={car} />
                   ))
                 }
               </div>

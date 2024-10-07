@@ -1,4 +1,6 @@
 import { Facebook, Twitter, Instagram, Mail, Phone } from 'lucide-react';
+import { IoCarSportOutline } from "react-icons/io5";
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
@@ -6,13 +8,18 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-wrap justify-between">
           <div className="w-full md:w-1/3 mb-6 md:mb-0">
-            <h3 className="text-lg font-semibold mb-2">CarRental Co.</h3>
-            <p className="text-sm">Providing quality car rentals since 2010.</p>
+            <Link to={"/"}>
+              <div className="flex items-center">
+                <IoCarSportOutline className='text-white text-3xl mr-2' />
+                <span className="text-xl font-bold text-white">CarRental</span>
+              </div>
+            </Link>
+            <p className="text-sm mt-2">Providing quality car rentals since 2010.</p>
           </div>
           <div className="w-full md:w-1/3 mb-6 md:mb-0">
             <h3 className="text-lg font-semibold mb-2">Quick Links</h3>
             <ul className="text-sm space-y-1">
-            <li><a href="/about" className="hover:text-white/50">About</a></li>
+              <li><a href="/about" className="hover:text-white/50">About</a></li>
               <li><a href="/privacy-policy" className="hover:text-white/50">Privacy Policy</a></li>
               <li><a href="/terms-services" className="hover:text-white/50">Terms of Service</a></li>
             </ul>
