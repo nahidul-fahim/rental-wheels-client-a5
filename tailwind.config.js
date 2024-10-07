@@ -6,27 +6,50 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {
-      colors: {
-        primary: {
-          DEFAULT: '#EB0A1E',
-          dark: '#c70012',
-        },
-        secondary: {
-          DEFAULT: '#2f4858',
-          dark: '#243743',
-        },
-        body: {
-          DEFAULT: '#575757',
-          dark: '#333333',
-        },
-      },
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)'
-      },
-    }
+  	extend: {
+  		colors: {
+  			primary: {
+  				DEFAULT: '#ff571f',
+  				dark: '#ed3b00',
+  				light: '#ffddd1'
+  			},
+  			secondary: {
+  				DEFAULT: '#2f4858',
+  				dark: '#243743'
+  			},
+  			body: {
+  				DEFAULT: '#575757',
+  				dark: '#333333'
+  			}
+  		},
+  		borderRadius: {
+  			lg: 'var(--radius)',
+  			md: 'calc(var(--radius) - 2px)',
+  			sm: 'calc(var(--radius) - 4px)'
+  		},
+  		keyframes: {
+  			'accordion-down': {
+  				from: {
+  					height: '0'
+  				},
+  				to: {
+  					height: 'var(--radix-accordion-content-height)'
+  				}
+  			},
+  			'accordion-up': {
+  				from: {
+  					height: 'var(--radix-accordion-content-height)'
+  				},
+  				to: {
+  					height: '0'
+  				}
+  			}
+  		},
+  		animation: {
+  			'accordion-down': 'accordion-down 0.2s ease-out',
+  			'accordion-up': 'accordion-up 0.2s ease-out'
+  		}
+  	}
   },
   plugins: [require("tailwindcss-animate")],
 }

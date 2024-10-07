@@ -6,14 +6,14 @@ import { Link } from "react-router-dom";
 
 const CarCard = ({ car }: { car: TSingleCar }) => {
     return (
-        <Card key={car._id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-white flex flex-col h-full">
+        <Card key={car._id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300 bg-white flex flex-col h-full shadow-md">
             <img src={car.image} alt={car.name} className="w-full h-56 object-cover" />
             <CardContent className="p-6 flex-grow">
                 <h3 className="text-xl font-semibold mb-3 text-secondary">{car.name}</h3>
                 <p className="bg-secondary/10 px-2 py-1/2 rounded text-sm font-medium text-body w-fit mb-3">{car.carType}</p>
                 <p className="text-2xl font-bold text-primary">${car.pricePerHour} <span className="text-sm text-body">per hour</span></p>
             </CardContent>
-            <CardFooter className="bg-gray-100 p-6 mt-auto">
+            <CardFooter className="p-6 mt-auto">
                 <Link to={`/cars/${car._id}`} className="w-full">
                     <Button className="w-full">
                         <IoCarSport className="mr-2 text-xl" /> View Details

@@ -9,6 +9,8 @@ import Booking from "@/pages/booking/Booking";
 import Car from "@/pages/car/Car";
 import CarDetails from "@/pages/carDetails/CarDetails";
 import Home from "@/pages/home/Home";
+import PrivacyPolicy from "@/pages/privacyPolicy/PrivacyPolicy";
+import TermsOfService from "@/pages/termsOfServices/TermsOfServices";
 import { createBrowserRouter } from "react-router-dom";
 
 
@@ -37,6 +39,14 @@ const router = createBrowserRouter([
             {
                 path: "/booking",
                 element: <Booking />
+            },
+            {
+                path: "/privacy-policy",
+                element: <PrivacyPolicy />
+            },
+            {
+                path: "/terms-services",
+                element: <TermsOfService />
             }
         ]
     },
