@@ -21,7 +21,7 @@ const Home = () => {
   return (
     <div className="min-h-screen font-sans leading-relaxed bg-gray-100 text-gray-800">
       {/* Hero Section */}
-      <section className="relative h-screen bg-cover bg-center" style={{ backgroundImage: 'url("/public/bg/aboutBg.webp")' }}>
+      <section className="relative h-screen bg-cover bg-center" style={{ backgroundImage: 'url("/bg/aboutBg.webp")' }}>
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent flex items-center justify-center">
           <div className="text-center space-y-6 max-w-4xl px-4">
             <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-wide drop-shadow-lg">
