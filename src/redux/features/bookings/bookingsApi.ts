@@ -14,6 +14,17 @@ const bookingsApi = baseApi.injectEndpoints({
             }),
         }),
 
+        // get dashboard info
+        dashboardInfo: builder.query({
+            query: ({ token }: { token: string }) => ({
+                url: '/bookings/dashboard-info',
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+        }),
+
         // get all bookings
         allBookings: builder.query({
             query: ({ token }: { token: string }) => ({
@@ -52,6 +63,7 @@ const bookingsApi = baseApi.injectEndpoints({
 
 export const {
     useCreateBookingMutation,
+    useDashboardInfoQuery,
     useAllBookingsQuery,
     useUserBookingsQuery,
     useUpdateBookingStatusMutation
