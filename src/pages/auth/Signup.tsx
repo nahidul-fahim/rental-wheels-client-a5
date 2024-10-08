@@ -241,17 +241,17 @@ const Signup = () => {
                 <CardFooter className="flex flex-col space-y-2">
                     <div className="text-sm text-center text-body">
                         <span>Already have an account? </span>
-                        <a href="/signin" className="font-medium text-blue-600 hover:text-blue-500">
+                        <Link to="/signin" className="font-medium text-blue-600 hover:text-blue-500">
                             Sign in
-                        </a>
+                        </Link>
                     </div>
                 </CardFooter>
 
                 {/* privacy policy  + terms of service */}
                 <div className="text-xs text-center text-gray-500 mt-4">
-                    <a href="/privacy-policy" className="hover:underline">Privacy Policy</a>
+                    <Link to="/privacy-policy" className="hover:underline">Privacy Policy</Link>
                     {' · '}
-                    <a href="/terms-services" className="hover:underline">Terms of Service</a>
+                    <Link to="/terms-services" className="hover:underline">Terms of Service</Link>
                 </div>
             </Card>
         </div>
