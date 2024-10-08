@@ -18,6 +18,7 @@ import RHInput from '@/components/form/RHInput';
 import { toast } from 'sonner';
 import { useUserBookingsQuery } from '@/redux/features/bookings/bookingsApi';
 import { TUser } from '@/types/allTypes';
+import Loading from '@/components/loading/Loading';
 
 const Overview: React.FC = () => {
   const token = useToken();
@@ -49,7 +50,7 @@ const Overview: React.FC = () => {
     }
   };
 
-  if (isLoading || userBookingLoading) return <div>Loading...</div>;
+  if (isLoading || userBookingLoading) return <Loading />;
   const userBookings = userBookingData?.data;
 
   const InfoItem: React.FC<{

@@ -6,6 +6,7 @@ import useToken from '@/hooks/useToken';
 import { useUpdateBookingStatusMutation, useUserBookingsQuery } from '@/redux/features/bookings/bookingsApi';
 import { toast } from "sonner";
 import { FaDollarSign } from "react-icons/fa6";
+import Loading from "@/components/loading/Loading";
 
 const PaymentManagement = () => {
   const token = useToken();
@@ -28,7 +29,7 @@ const PaymentManagement = () => {
   };
 
   if (userBookingLoading) {
-    return <div>Loading...</div>
+    return <Loading />
   }
   const userBookings = userBookingData?.data;
 

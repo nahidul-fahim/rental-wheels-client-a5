@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { useAllBookingsQuery, useUpdateBookingStatusMutation } from '@/redux/features/bookings/bookingsApi';
 import useToken from '@/hooks/useToken';
 import { toast } from 'sonner';
+import Loading from '@/components/loading/Loading';
 
 const ManageBookings: React.FC = () => {
     const token = useToken();
@@ -14,7 +15,7 @@ const ManageBookings: React.FC = () => {
     const [updateBookingStatus, { isLoading: isUpdating }] = useUpdateBookingStatusMutation();
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <Loading />;
     }
 
     const bookings = data?.data;

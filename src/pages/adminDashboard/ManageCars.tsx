@@ -11,6 +11,7 @@ import { useAddCarMutation, useGetAllCarsQuery, useUpdateCarMutation } from '@/r
 import { toast } from 'sonner';
 import RHRadio from '@/components/form/RHRadio';
 import useToken from '@/hooks/useToken';
+import Loading from '@/components/loading/Loading';
 
 interface Car {
     _id: string;
@@ -88,7 +89,7 @@ const ManageCars: React.FC = () => {
         setCarImage(null);
     };
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <Loading />;
     const cars = data?.data?.allCars || [];
 
     return (

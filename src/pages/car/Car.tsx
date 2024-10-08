@@ -4,12 +4,38 @@ import { IoFilter, IoHome, IoChevronForward } from "react-icons/io5";
 import { useGetAllCarsQuery } from '@/redux/features/car/carApi';
 import { TSingleCar } from '@/types/allTypes';
 import CarCard from '@/components/carCard/CarCard';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Car = () => {
     const [carType, setCarType] = useState('');
     const { isLoading, data } = useGetAllCarsQuery({ carType });
+    const carLoadingSkeletonNumber = [1, 2, 3, 4, 5, 6]
 
-    if (isLoading) return <div>Loading...</div>
+    if (isLoading) {
+        return (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 container mx-auto">
+                <div className="flex flex-col space-y-3 col-span-full">
+                    <Skeleton className="h-[200px] w-[90%] rounded-xl" />
+                    <div className="space-y-2">
+                        <Skeleton className="h-4 w-[250px]" />
+                        <Skeleton className="h-4 w-[200px]" />
+                    </div>
+                </div>
+                {
+                    carLoadingSkeletonNumber?.map((skeleton: number) => (
+                        <div key={skeleton} className="flex flex-col space-y-3">
+                            <Skeleton className="h-[200px] w-[90%] rounded-xl" />
+                            <div className="space-y-2">
+                                <Skeleton className="h-4 w-[250px]" />
+                                <Skeleton className="h-4 w-[200px]" />
+                            </div>
+                        </div>
+                    )
+                    )
+                }
+            </div>
+        )
+    }
     const allCars = data?.data?.allCars;
     const uniqueCarTypes = data?.data?.uniqueCarTypes;
 
@@ -65,6 +91,9 @@ const Car = () => {
                 </div>
 
                 {/* Car Listings */}
+                {
+
+                }
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {allCars?.map((car: TSingleCar) => (
                         <CarCard key={car._id} car={car} />

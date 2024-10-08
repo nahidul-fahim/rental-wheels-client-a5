@@ -11,6 +11,7 @@ import RHInput from '@/components/form/RHInput';
 import RHDatePicker from '@/components/form/RHDatePicker';
 import RHCheckbox from '@/components/form/RHCheckbox';
 import RHRadio from '@/components/form/RHRadio';
+import Loading from '@/components/loading/Loading';
 
 const BookingManagement = () => {
   const token = useToken();
@@ -52,7 +53,7 @@ const BookingManagement = () => {
   };
 
   if (userBookingLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   const userBookings = userBookingData?.data;
@@ -169,7 +170,7 @@ const BookingManagement = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {userBookings.map((booking: any) => (
+              {userBookings?.map((booking: any) => (
                 <TableRow key={booking._id}>
                   <TableCell>{booking?.car?.name}</TableCell>
                   <TableCell>{booking?.date}</TableCell>

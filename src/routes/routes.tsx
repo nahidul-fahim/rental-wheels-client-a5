@@ -3,6 +3,8 @@ import ErrorPage from "@/components/error/ErrorPage";
 import DashboardRouter from "@/components/layout/DashboardRouter";
 import ProtectedRoute from "@/components/layout/ProtectedRoute";
 import About from "@/pages/about/About";
+import ForgetPassword from "@/pages/auth/ForgetPassword";
+import ResetPassword from "@/pages/auth/ResetPassword";
 import Signin from "@/pages/auth/Signin";
 import Signup from "@/pages/auth/Signup";
 import Booking from "@/pages/booking/Booking";
@@ -53,6 +55,14 @@ const router = createBrowserRouter([
     {
         path: "/signin",
         element: <Signin />
+    },
+    {
+        path: "/forget-password",
+        element: <ForgetPassword />
+    },
+    {
+        path: "/reset-password",
+        element: <ResetPassword />
     },
     {
         path: "/signup",

@@ -1,28 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
-import { IoMailOutline, IoLockClosedOutline, IoCarSportSharp, IoEye, IoEyeOff, IoHome, IoChevronForward } from "react-icons/io5";
+import { IoMailOutline, IoCarSportSharp, IoHome, IoChevronForward } from "react-icons/io5";
 import RHFormProvider from '@/components/form/RHFormProvider';
 import { FieldValues } from 'react-hook-form';
 import RHInput from '@/components/form/RHInput';
 import { Button } from '@/components/ui/button';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '@/redux/hooks';
-import { useSigninMutation } from '@/redux/features/auth/authApi';
+import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
-import { setUser, TUser } from '@/redux/features/auth/authSlice';
-import { verifyToken } from '@/utils/verifyToken';
+import { useForgetPasswordMutation } from '@/redux/features/auth/authApi';
 
-
-const Signin = () => {
+const ForgetPassword = () => {
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
-    const navigate = useNavigate();
-
-    // redux hooks
-    const dispatch = useAppDispatch();
-    const [signin, { isLoading }] = useSigninMutation();
+    const [forgetPassword, { isLoading }] = useForgetPasswordMutation();
 
     // validate email
     const validateEmail = (email: string) => {
@@ -30,43 +21,21 @@ const Signin = () => {
         return re.test(email);
     };
 
-    // show/hide password
-    const handleShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
-
     const onSubmit = async (data: FieldValues) => {
         if (!validateEmail(email)) {
             setError('Please enter a valid email address.');
             return;
         }
-        const toastId = toast.loading("Signing in...");
+        const toastId = toast.loading("Sending reset link...");
         try {
-            const signinInfo = {
-                email: data?.email,
-                password: data?.password,
-            };
-            // send the formData to api
-            const res = await signin(signinInfo).unwrap();
-            const user = verifyToken(res?.token) as TUser;
-
-
-            if (res?.success) {
-                toast.success("Signin successful!", { id: toastId, duration: 2000 });
-                navigate("/")
-                // setting the user to state
-                dispatch(setUser({
-                    user: user,
-                    token: res?.token
-                }));
-            } else {
-                toast.error(res?.message, { id: toastId, duration: 2000 });
+            const res = await forgetPassword(data);
+            if (res?.data?.success) {
+                toast.success("Reset link sent to your email!", { id: toastId, duration: 2000 });
             }
         } catch (error: any) {
             const errorMessage = error?.data?.message || 'An error occurred';
             toast.error(errorMessage, { id: toastId, duration: 2000 });
         }
-
     };
 
     return (
@@ -84,7 +53,7 @@ const Signin = () => {
                             </li>
                             <li className="flex items-center">
                                 <IoChevronForward className="flex-shrink-0 size-3" />
-                                <span className="ml-2 text-body/50 font-sm font-medium">Signin</span>
+                                <span className="ml-2 text-body/50 font-sm font-medium">Forget Password</span>
                             </li>
                         </ol>
                     </nav>
@@ -93,7 +62,7 @@ const Signin = () => {
                         <CardTitle className="text-primary text-xl md:text-3xl font-semibold text-center ml-2">Rental Wheels</CardTitle>
                     </div>
                     <CardDescription className="text-center text-body">
-                        Sign in to start your journey
+                        Enter your email to reset your password
                     </CardDescription>
                 </CardHeader>
 
@@ -114,48 +83,18 @@ const Signin = () => {
                         </div>
                         {error && <p className="text-red-600 font-medium text-sm text-center">{error}</p>}
 
-                        {/* password */}
-                        <div className="space-y-2">
-                            <div className="relative">
-                                <IoLockClosedOutline className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
-                                <RHInput
-                                    type={showPassword ? 'text' : 'password'}
-                                    name='password'
-                                    placeholder='password'
-                                    className='pl-10'
-                                />
-                                <button
-                                    type="button"
-                                    className="absolute top-1/2 transform -translate-y-1/2 right-3"
-                                    onClick={handleShowPassword}>
-                                    {
-                                        showPassword ?
-                                            <IoEyeOff className="text-body/60 text-lg" />
-                                            :
-                                            <IoEye className="text-body/60 text-lg" />
-                                    }
-                                </button>
-                            </div>
-                        </div>
-
                         {/* submit button */}
-                        <Button type="submit" disabled={isLoading} className="w-full">
-                            {isLoading ? "Signing in..." : "Sign In"}
+                        <Button type="submit" className="w-full" disabled={isLoading}>
+                            Send Reset Link
                         </Button>
                     </RHFormProvider>
                 </CardContent>
 
-
                 <CardFooter className="flex flex-col space-y-2">
-                    <div className="text-sm text-center">
-                        <Link to="/forget-password" className="font-medium text-blue-600 hover:text-blue-500">
-                            Forgot password?
-                        </Link>
-                    </div>
                     <div className="text-sm text-center text-body">
-                        <span>Don't have an account? </span>
-                        <Link to="/signup" className="font-medium text-blue-600 hover:text-blue-500">
-                            Sign up
+                        <span>Remember your password? </span>
+                        <Link to="/signin" className="font-medium text-blue-600 hover:text-blue-500">
+                            Sign in
                         </Link>
                     </div>
                 </CardFooter>
@@ -171,4 +110,4 @@ const Signin = () => {
     );
 };
 
-export default Signin;
+export default ForgetPassword;

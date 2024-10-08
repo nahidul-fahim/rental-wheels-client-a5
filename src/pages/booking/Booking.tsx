@@ -7,6 +7,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { IoChevronForward, IoHome, IoSearch } from "react-icons/io5";
 import { useGetAllCarsQuery } from '@/redux/features/car/carApi';
 import CarCard from '@/components/carCard/CarCard';
+import Loading from '@/components/loading/Loading';
 
 const Booking: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -16,7 +17,7 @@ const Booking: React.FC = () => {
   const [showResults, setShowResults] = useState(false);
   const { isLoading, data } = useGetAllCarsQuery({ carType, searchTerm, minPricePerHour: minPrice, maxPricePerHour: maxPrice });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loading />;
 
   const allCars = data?.data?.allCars;
   const uniqueCarTypes = data?.data?.uniqueCarTypes;

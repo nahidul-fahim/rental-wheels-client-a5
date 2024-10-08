@@ -10,6 +10,7 @@ import useToken from '@/hooks/useToken';
 import { useAllBookingsQuery } from '@/redux/features/bookings/bookingsApi';
 import { useReturnCarMutation } from '@/redux/features/car/carApi';
 import { toast } from 'sonner';
+import Loading from '@/components/loading/Loading';
 
 const ManageReturnCars: React.FC = () => {
     const token = useToken();
@@ -20,7 +21,7 @@ const ManageReturnCars: React.FC = () => {
     const [bookingId, setBookingId] = useState('');
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <Loading />;
     }
 
     const bookings = data?.data;

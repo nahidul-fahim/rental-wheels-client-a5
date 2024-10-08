@@ -29,7 +29,7 @@ const RHRadio = ({ name, label, options, className, defaultValue, required = tru
                         defaultChecked={defaultValue}
                         required={required}
                     >
-                        {options.map((option) => (
+                        {options?.map((option) => (
                             <div key={option.value} className="flex items-center space-x-2">
                                 <RadioGroupItem value={option.value} id={`${name}-${option.value}`} />
                                 <Label htmlFor={`${name}-${option.value}`}>{option.label}</Label>

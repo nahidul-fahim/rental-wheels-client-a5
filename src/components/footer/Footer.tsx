@@ -11,7 +11,7 @@ const Footer = () => {
             <Link to={"/"}>
               <div className="flex items-center">
                 <IoCarSportOutline className='text-white text-3xl mr-2' />
-                <span className="text-xl font-bold text-white">CarRental</span>
+                <span className="text-xl font-bold text-white">RentalWheels</span>
               </div>
             </Link>
             <p className="text-sm mt-2">Providing quality car rentals since 2010.</p>
@@ -27,11 +27,11 @@ const Footer = () => {
           <div className="w-full md:w-1/3 space-y-2">
             <h3 className="text-lg font-semibold mb-2">Contact Us</h3>
             <p className="text-sm flex items-center mb-1"><Phone className="w-4 h-4 mr-2" /> +1 (555) 123-4567</p>
-            <p className="text-sm flex items-center"><Mail className="w-4 h-4 mr-2" /> info@carrentalco.com</p>
+            <p className="text-sm flex items-center"><Mail className="w-4 h-4 mr-2" /> info@rentalwheels.com</p>
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-orange-600 flex flex-wrap justify-between items-center">
-          <p className="text-sm">&copy; 2024 CarRental Co. All rights reserved.</p>
+          <p className="text-sm">&copy; 2024 Renal Wheels. All rights reserved.</p>
           <div className="flex space-x-4 mt-4 md:mt-0">
             <a href="#" className="text-white/50 hover:text-white"><Facebook /></a>
             <a href="#" className="text-white/50 hover:text-white"><Twitter /></a>

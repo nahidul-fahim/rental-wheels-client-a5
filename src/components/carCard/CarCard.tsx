@@ -18,7 +18,7 @@ const CarCard = ({ car }: { car: TSingleCar }) => {
             <CardContent className="flex-grow">
                 <p className="text-sm text-gray-600 mb-4">{(car.description).substring(0, 130)}...</p>
                 <div className="flex flex-wrap gap-x-3 gap-y-2 mb-2">
-                    {car.features.map((feature: string, index: number) => (
+                    {car?.features?.map((feature: string, index: number) => (
                         <Badge key={index} variant="outline">{feature}</Badge>
                     ))}
                 </div>

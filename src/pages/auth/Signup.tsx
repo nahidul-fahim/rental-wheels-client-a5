@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
-import { IoMailOutline, IoLockClosedOutline, IoCarSportSharp, IoEye, IoEyeOff, IoPersonOutline, IoPhonePortraitOutline, IoLocationOutline } from "react-icons/io5";
+import { IoMailOutline, IoLockClosedOutline, IoCarSportSharp, IoEye, IoEyeOff, IoPersonOutline, IoPhonePortraitOutline, IoLocationOutline, IoHome, IoChevronForward } from "react-icons/io5";
 import RHFormProvider from '@/components/form/RHFormProvider';
 import { FieldValues } from 'react-hook-form';
 import RHInput from '@/components/form/RHInput';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '@/redux/hooks';
 import { useSignupMutation } from '@/redux/features/auth/authApi';
 import { toast } from 'sonner';
@@ -87,12 +87,27 @@ const Signup = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-tr from-white to-gray-200 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-            <Card className="w-full max-w-md bg-white p-6">
+        <div className="min-h-screen bg-gradient-to-tr from-white to-gray-200 flex items-center justify-center py-12 px-3 md:px-6 lg:px-8">
+            <Card className="w-full max-w-md bg-white md:p-6">
                 <CardHeader className="space-y-1 mb-2">
+                    {/* Breadcrumb Navigation */}
+                    <nav className="flex items-center text-body/50 mb-8" aria-label="Breadcrumb">
+                        <ol className="flex items-center space-x-2">
+                            <li>
+                                <Link to="/" className="hover:text-primary flex items-center">
+                                    <IoHome className="flex-shrink-0 size-4" />
+                                    <span className="sr-only">Home</span>
+                                </Link>
+                            </li>
+                            <li className="flex items-center">
+                                <IoChevronForward className="flex-shrink-0 size-3" />
+                                <span className="ml-2 text-body/50 font-sm font-medium">Sign up</span>
+                            </li>
+                        </ol>
+                    </nav>
                     <div className="flex items-center justify-center">
-                        <IoCarSportSharp className="h-12 w-12 text-primary" />
-                        <CardTitle className="text-primary text-3xl font-semibold text-center ml-2">Rental Wheels</CardTitle>
+                        <IoCarSportSharp className="size-8 md:size-12 text-primary" />
+                        <CardTitle className="text-primary text-xl md:text-3xl font-semibold text-center ml-2">Rental Wheels</CardTitle>
                     </div>
                     <CardDescription className="text-center text-body">
                         Sign up to start your rental journey
@@ -234,9 +249,9 @@ const Signup = () => {
 
                 {/* privacy policy  + terms of service */}
                 <div className="text-xs text-center text-gray-500 mt-4">
-                    <a href="#" className="hover:underline">Privacy Policy</a>
+                    <a href="/privacy-policy" className="hover:underline">Privacy Policy</a>
                     {' · '}
-                    <a href="#" className="hover:underline">Terms of Service</a>
+                    <a href="/terms-services" className="hover:underline">Terms of Service</a>
                 </div>
             </Card>
         </div>

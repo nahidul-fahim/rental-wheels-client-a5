@@ -66,7 +66,7 @@ const Header = () => {
                     <Link to={"/"}>
                         <div className="flex items-center">
                             <IoCarSportOutline className='text-primary-dark text-3xl mr-2' />
-                            <span className="text-xl font-bold text-primary">CarRental</span>
+                            <span className="text-xl font-bold text-primary">RentalWheels</span>
                         </div>
                     </Link>
                 </div>

@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import useToken from '@/hooks/useToken';
 import { useGetAllUsersQuery, useUpdateUserStatusMutation } from '@/redux/features/user/userApi';
 import { toast } from 'sonner';
+import Loading from '@/components/loading/Loading';
 
 const UserManagement: React.FC = () => {
     const token = useToken();
@@ -39,7 +40,7 @@ const UserManagement: React.FC = () => {
     };
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <Loading />;
     }
 
     const users = data?.data;

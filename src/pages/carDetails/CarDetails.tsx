@@ -15,6 +15,7 @@ import CarDetailsBreadcrumb from './CarDetailsBreadcrumb';
 import { useCreateBookingMutation } from '@/redux/features/bookings/bookingsApi';
 import useToken from '@/hooks/useToken';
 import { toast } from 'sonner';
+import Loading from '@/components/loading/Loading';
 
 interface IBookingDetails {
     name: string;
@@ -38,7 +39,7 @@ const CarDetails = () => {
     const [bookingDetails, setBookingDetails] = useState<IBookingDetails | null>(null);
     const [createBooking, { isLoading: isBookingLoading }] = useCreateBookingMutation();
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <Loading />;
     const carDetails = data?.data;
 
     // submit the booking
