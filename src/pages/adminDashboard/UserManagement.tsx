@@ -9,9 +9,12 @@ import useToken from '@/hooks/useToken';
 import { useGetAllUsersQuery, useUpdateUserStatusMutation } from '@/redux/features/user/userApi';
 import { toast } from 'sonner';
 import Loading from '@/components/loading/Loading';
+import { useAppSelector } from '@/redux/hooks';
+import { selectCurrentUser } from '@/redux/features/auth/authSlice';
 
 const UserManagement: React.FC = () => {
     const token = useToken();
+    const currentUser = useAppSelector(selectCurrentUser);
     const { data, isLoading, refetch } = useGetAllUsersQuery({ token: token as string });
     const [updateUserStatus, { isLoading: isUpdating }] = useUpdateUserStatusMutation();
 
@@ -73,7 +76,7 @@ const UserManagement: React.FC = () => {
                                 </TableCell>
                                 <TableCell>
                                     <Switch
-                                        disabled={isUpdating}
+                                        disabled={isUpdating || user?.email === currentUser?.userEmail}
                                         checked={user.isActive}
                                         onCheckedChange={() => handleToggleActive(user._id, user.isActive)}
                                     />
@@ -83,7 +86,7 @@ const UserManagement: React.FC = () => {
                                         onClick={() => handleChangeRole(user._id, user.role)}
                                         variant="outline"
                                         size="sm"
-                                        disabled={isUpdating}
+                                        disabled={isUpdating || user?.email === currentUser?.userEmail}
                                     >
                                         Change to {user.role === 'user' ? 'Admin' : 'User'}
                                     </Button>

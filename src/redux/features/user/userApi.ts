@@ -37,7 +37,7 @@ const userApi = baseApi.injectEndpoints({
         // update user role and 
         updateUserStatus: builder.mutation({
             query: ({ id, updatedData, token }: { id: string, updatedData: Record<string, any>, token: string }) => ({
-                url: `/user/status${id}`,
+                url: `/user/status/${id}`,
                 method: 'PUT',
                 body: updatedData,
                 headers: {
