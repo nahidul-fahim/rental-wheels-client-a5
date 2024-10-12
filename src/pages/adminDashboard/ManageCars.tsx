@@ -7,11 +7,12 @@ import RHFormProvider from '@/components/form/RHFormProvider';
 import RHInput from '@/components/form/RHInput';
 import RHFileSelect from '@/components/form/RHFileSelect';
 import RHTextArea from '@/components/form/RHTextarea';
-import { useAddCarMutation, useGetAllCarsQuery, useUpdateCarMutation } from '@/redux/features/car/carApi';
+import { useAddCarMutation, useDeleteCarMutation, useGetAllCarsQuery, useUpdateCarMutation } from '@/redux/features/car/carApi';
 import { toast } from 'sonner';
 import RHRadio from '@/components/form/RHRadio';
 import useToken from '@/hooks/useToken';
 import Loading from '@/components/loading/Loading';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
 interface Car {
     _id: string;
@@ -34,6 +35,7 @@ const ManageCars: React.FC = () => {
     const [isAddingCar, setIsAddingCar] = useState(false);
     const [editingCar, setEditingCar] = useState<Car | null>(null);
     const [carImage, setCarImage] = useState<File | null>(null);
+    const [deleteCar, { isLoading: isDeleting }] = useDeleteCarMutation();
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files![0];
@@ -75,6 +77,19 @@ const ManageCars: React.FC = () => {
         } catch (error: any) {
             const errorMessage = error.data?.message || "Something went wrong";
             toast.error(errorMessage, { id: toastId });
+        }
+    };
+
+    // handle delete car
+    const handleDeleteCar = async (carId: string) => {
+        const toastId = toast.loading("Deleting post...");
+        try {
+            await deleteCar({  id: carId as string, token: token as string });
+            toast.success("Car deleted successfully.", { id: toastId, duration: 2000 });
+            refetch();
+        } catch (error: any) {
+            const errorMessage = error?.data?.message || 'Failed to delete';
+            toast.error(errorMessage, { id: toastId, duration: 2000 });
         }
     };
 
@@ -167,7 +182,23 @@ const ManageCars: React.FC = () => {
                                 <TableCell>${car?.pricePerHour}</TableCell>
                                 <TableCell>
                                     <Button variant="outline" size="sm" className="mr-2" onClick={() => handleEdit(car)}>Edit</Button>
-                                    <Button variant="destructive" size="sm">Delete</Button>
+                                    {/* Delete Button */}
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button variant="destructive" disabled={isDeleting}>Delete</Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>Are you sure to delete?</AlertDialogTitle>
+                                                <AlertDialogDescription>You can&apos;t undo this action.</AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                {/* Confirm Delete Action */}
+                                                <AlertDialogAction onClick={() => handleDeleteCar(car?._id)}>Yes! Delete</AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
                                 </TableCell>
                             </TableRow>
                         ))}
